@@ -68,6 +68,13 @@ async function startDevServer() {
   status.value = 'start'
   const process = await wc.spawn('pnpm', ['run', 'dev'])
   stream.value = process.output
+
+  // In dev, when doing HMR, we kill the previous process while reusing the same WebContainer
+  if (import.meta.hot) {
+    import.meta.hot.accept(() => {
+      process.kill()
+    })
+  }
 }
 
 watchEffect(() => {
@@ -85,6 +92,6 @@ onMounted(startDevServer)
       <div i-svg-spinners-90-ring-with-bg />
       {{ status }}ing
     </div>
-    <TerminalOutput :stream="stream" h="33%" />
+    <TerminalOutput :stream="stream" min-h-0 />
   </div>
 </template>

@@ -1,8 +1,11 @@
 <template>
-  <nav px6 py4 text-lg border="b base" flex="~ gap-2 items-center">
-    <div i-logos-nuxt-icon text-4xl />
-    <span text-2xl>learn.nuxt.com</span>
+  <nav px6 py3 text-lg border="b base" flex="~ gap-2 items-center">
+    <NuxtLink to="/" flex="~ gap-2 items-baseline" title="Nuxt Playground">
+      <NuxtLogo class="h-1.3em" />
+      <span text-xl>Playground</span>
+    </NuxtLink>
     <div flex-auto />
+    <ColorSchemeToggle />
     <NuxtLink
       p2
       rounded
