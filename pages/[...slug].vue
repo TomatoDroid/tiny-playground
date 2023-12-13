@@ -1,0 +1,8 @@
+<template>
+  <div class="grid grid-cols-[1fr_2fr] h-full">
+    <article class="border-r border-base p4 prose">
+      <ContentDoc />
+    </article>
+    <ThePlayground />
+  </div>
+</template>
