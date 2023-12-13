@@ -9,7 +9,7 @@ import '@unocss/reset/tailwind.css'
 </template>
 
 <style>
-.dark-mode {
+.dark {
   color-scheme: dark;
 }
 body {

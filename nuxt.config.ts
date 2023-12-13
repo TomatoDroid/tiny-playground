@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
   ],
   colorMode: {
-    classPrefix: '',
+    classSuffix: '',
   },
   nitro: {
     routeRules: {
