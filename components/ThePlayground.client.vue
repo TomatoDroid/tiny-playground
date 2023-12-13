@@ -10,27 +10,18 @@ const error = shallowRef<{ message: string }>()
 const stream = ref<ReadableStream>()
 
 async function startDevServer() {
-  const rawFiles = import.meta.glob(
-    [
-      '../templates/basic/*.*',
-      '!../node_modules/**',
-    ],
-    {
-      as: 'raw',
-      eager: true,
-    },
-  )
-
-  const files = Object.fromEntries(
-    Object.entries(rawFiles).map(([path, content]) => {
-      return [
-        path.replace('../templates/basic/', ''),
-        {
-          file:
-          { contents: content },
-        },
-      ]
-    }),
+  const tree = globFilesToWebContainerFs(
+    '../templates/nitro/',
+    import.meta.glob(
+      [
+        '../templates/nitro/**/*.*',
+        '!../node_modules/**',
+      ],
+      {
+        as: 'raw',
+        eager: true,
+      },
+    ),
   )
 
   const wc = await useWebContainer()
@@ -47,7 +38,7 @@ async function startDevServer() {
 
   status.value = 'mount'
 
-  await wc.mount(files)
+  await wc.mount(tree)
 
   status.value = 'install'
 
@@ -82,6 +73,12 @@ watchEffect(() => {
     iframeEl.value.src = wcUrl.value
 })
 
+function sendMessage() {
+  if (!iframeEl.value)
+    return
+  iframeEl.value.contentWindow!.postMessage('hello', '*')
+}
+
 onMounted(startDevServer)
 </script>
 
@@ -93,5 +90,8 @@ onMounted(startDevServer)
       {{ status }}ing
     </div>
     <TerminalOutput :stream="stream" min-h-0 />
+    <button @click="sendMessage">
+      send
+    </button>
   </div>
 </template>
