@@ -1,6 +1,13 @@
 <script setup lang="ts">
+// @ts-expect-error missing type
+import { Pane, Splitpanes } from 'splitpanes'
+
 const iframeEl = ref<HTMLIFrameElement>()
 const wcUrl = ref<string>()
+
+const isDragging = usePanelDragging()
+const panelSizeEdit = useLocalStorage('nuxt-playground-panel-edit', 30)
+const panelSizeFrame = useLocalStorage('nuxt-playground-panel-frame', 30)
 
 type Status = 'init' | 'mount' | 'install' | 'start' | 'ready' | 'error'
 
@@ -75,25 +82,43 @@ watchEffect(() => {
     iframeEl.value.src = wcUrl.value
 })
 
-function sendMessage() {
-  if (!iframeEl.value)
-    return
-  iframeEl.value.contentWindow!.postMessage('hello', '*')
+onMounted(startDevServer)
+
+function start() {
+  isDragging.value = true
 }
 
-onMounted(startDevServer)
+function end(e: { size: number }[]) {
+  isDragging.value = false
+  panelSizeEdit.value = e[0].size
+  panelSizeFrame.value = e[1].size
+}
 </script>
 
 <template>
-  <div w-full max-h-full grid="~ rows-[2fr_1fr]" of-hidden relative>
-    <iframe v-show="status === 'ready'" ref="iframeEl" w-full h-full />
-    <div v-if="status !== 'ready'" flex="~ col justify-center items-center" capitalize text-lg>
-      <div i-svg-spinners-90-ring-with-bg />
-      {{ status }}ing
-    </div>
-    <TerminalOutput :stream="stream" min-h-0 />
-    <button @click="sendMessage">
-      send
-    </button>
-  </div>
+  <Splitpanes
+    class="of-hidden relative"
+    horizontal
+    @resize="start"
+    @resized="end"
+  >
+    <Pane :size="panelSizeEdit" min-size="10">
+      Edit
+    </Pane>
+    <Pane :size="panelSizeFrame" min-size="10">
+      <iframe
+        v-show="status === 'ready'" ref="iframeEl" w-full h-full
+        :class="{
+          'pointer-events-none': isDragging,
+        }"
+      />
+      <div v-if="status !== 'ready'" flex="~ col justify-center items-center" capitalize text-lg h-full>
+        <div i-svg-spinners-90-ring-with-bg />
+        {{ status }}ing
+      </div>
+    </Pane>
+    <Pane>
+      <TerminalOutput :stream="stream" min-h-0 />
+    </Pane>
+  </Splitpanes>
 </template>
