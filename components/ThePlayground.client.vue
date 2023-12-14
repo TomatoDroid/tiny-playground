@@ -11,10 +11,10 @@ const stream = ref<ReadableStream>()
 
 async function startDevServer() {
   const tree = globFilesToWebContainerFs(
-    '../templates/nitro/',
+    '../templates/basic/',
     import.meta.glob(
       [
-        '../templates/nitro/**/*.*',
+        '../templates/basic/**/*.*',
         '!../node_modules/**',
       ],
       {
@@ -23,6 +23,8 @@ async function startDevServer() {
       },
     ),
   )
+
+  console.log(tree)
 
   const wc = await useWebContainer()
 
