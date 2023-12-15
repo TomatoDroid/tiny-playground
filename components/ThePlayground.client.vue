@@ -118,7 +118,7 @@ function end(e: { size: number }[]) {
       </div>
     </Pane>
     <Pane>
-      <TerminalOutput :stream="stream" min-h-0 />
+      <TerminalOutput :stream="stream" />
     </Pane>
   </Splitpanes>
 </template>

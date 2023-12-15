@@ -13,6 +13,8 @@ const term = new Terminal()
 const fitAddon = new FitAddon()
 term.loadAddon(fitAddon)
 
+useResizeObserver(root, useDebounceFn(() => fitAddon.fit(), 200))
+
 watch(
   () => props.stream,
   (s) => {
@@ -41,5 +43,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="root" />
+  <div ref="root" h-full w-full />
 </template>
