@@ -15,6 +15,6 @@ function toggleDark() {
     hover="bg-active"
     @click="toggleDark"
   >
-    <div class="i-carbon-moon dark:i-carbon-sun" />
+    <div class="i-carbon-sun dark:i-carbon-moon" />
   </button>
 </template>
