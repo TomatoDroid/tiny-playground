@@ -22,6 +22,7 @@ async function startDevServer() {
     import.meta.glob(
       [
         '../templates/basic/**/*.*',
+        '!../.DS_Store',
         '!../node_modules/**',
       ],
       {
