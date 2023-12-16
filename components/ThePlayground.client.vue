@@ -6,8 +6,8 @@ const iframeEl = ref<HTMLIFrameElement>()
 const wcUrl = ref<string>()
 
 const isDragging = usePanelDragging()
-const panelSizeEdit = useLocalStorage('nuxt-playground-panel-edit', 30)
-const panelSizeFrame = useLocalStorage('nuxt-playground-panel-frame', 30)
+const panelSizeEdit = usePanelCookie('nuxt-playground-panel-edit', 30)
+const panelSizeFrame = usePanelCookie('nuxt-playground-panel-frame', 30)
 
 type Status = 'init' | 'mount' | 'install' | 'start' | 'ready' | 'error'
 
@@ -82,11 +82,6 @@ async function startDevServer() {
   }
 }
 
-watchEffect(() => {
-  if (wcUrl.value && iframeEl.value)
-    iframeEl.value.src = wcUrl.value
-})
-
 onMounted(startDevServer)
 
 function start() {
@@ -116,10 +111,14 @@ function end(e: { size: number }[]) {
         <span text-sm>Preview</span>
       </div>
       <iframe
-        v-show="status === 'ready'" ref="iframeEl" w-full h-full
+        v-if="wcUrl"
+        ref="iframeEl"
+        :src="wcUrl"
+        w-full h-full
         :class="{
           'pointer-events-none': isDragging,
         }"
+        allow="geolocation; microphone; camera; payment; autoplay; serial; cross-origin-isolated"
       />
       <div v-if="status !== 'ready'" flex="~ col justify-center items-center" capitalize text-lg h-full>
         <div i-svg-spinners-90-ring-with-bg />
