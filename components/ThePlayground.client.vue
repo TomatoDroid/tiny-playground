@@ -108,7 +108,7 @@ function end(e: { size: number }[]) {
     @resized="end"
   >
     <Pane :size="panelSizeEdit" min-size="10">
-      Edit
+      <PanelEdit />
     </Pane>
     <Pane :size="panelSizeFrame" min-size="10">
       <iframe
@@ -123,7 +123,7 @@ function end(e: { size: number }[]) {
       </div>
     </Pane>
     <Pane>
-      <TerminalOutput :stream="stream" />
+      <PanelTerminal :stream="stream" />
     </Pane>
   </Splitpanes>
 </template>

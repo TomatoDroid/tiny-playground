@@ -9,7 +9,10 @@ const props = defineProps<{
 
 const root = ref<HTMLDivElement>()
 
-const term = new Terminal()
+const term = new Terminal({
+  customGlyphs: true,
+  lineHeight: 0.9,
+})
 const fitAddon = new FitAddon()
 term.loadAddon(fitAddon)
 
@@ -38,6 +41,7 @@ watch(
 
 onMounted(() => {
   term.open(root.value!)
+  term.write('\n')
   fitAddon.fit()
 })
 </script>
