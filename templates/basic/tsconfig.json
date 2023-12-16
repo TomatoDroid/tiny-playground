@@ -1,4 +1,6 @@
 {
   "extends": "./.nuxt/tsconfig.json",
-  "composite": true
+  "compilerOptions": {
+    "composite": true
+  }
 }
