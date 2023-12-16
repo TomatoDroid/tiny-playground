@@ -2,6 +2,7 @@
 import '@unocss/reset/tailwind.css'
 import 'splitpanes/dist/splitpanes.css'
 import './styles/override.css'
+import './styles/base.css'
 </script>
 
 <template>
@@ -9,14 +10,3 @@ import './styles/override.css'
     <NuxtPage />
   </NuxtLayout>
 </template>
-
-<style>
-.dark {
-  color-scheme: dark;
-}
-body {
-  height: 100vh;
-  overflow: hidden;
-  --uno: bg-base font-sans;
-}
-</style>

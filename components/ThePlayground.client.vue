@@ -111,6 +111,10 @@ function end(e: { size: number }[]) {
       <PanelEdit />
     </Pane>
     <Pane :size="panelSizeFrame" min-size="10">
+      <div flex="~ gap-2 items-center" px4 py2 border="b base dashed" bg-faded>
+        <div i-ph-globe-duotone />
+        <span text-sm>Preview</span>
+      </div>
       <iframe
         v-show="status === 'ready'" ref="iframeEl" w-full h-full
         :class="{

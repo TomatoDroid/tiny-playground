@@ -1,6 +1,6 @@
 <template>
-  <div class="w-screen h-screen h-100dvh">
+  <main class="w-screen h-screen h-100dvh">
     <TheNav />
     <slot />
-  </div>
+  </main>
 </template>
