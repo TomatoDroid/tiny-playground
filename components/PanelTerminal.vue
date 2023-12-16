@@ -11,7 +11,6 @@ const root = ref<HTMLDivElement>()
 
 const term = new Terminal({
   customGlyphs: true,
-  lineHeight: 0.9,
 })
 const fitAddon = new FitAddon()
 term.loadAddon(fitAddon)
