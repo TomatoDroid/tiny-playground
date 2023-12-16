@@ -22,8 +22,7 @@ async function startDevServer() {
     import.meta.glob(
       [
         '../templates/basic/**/*.*',
-        '!../.DS_Store',
-        '!../node_modules/**',
+        '../templates/basic/**/.npmrc',
       ],
       {
         as: 'raw',
@@ -114,7 +113,7 @@ function end(e: { size: number }[]) {
         v-if="wcUrl"
         ref="iframeEl"
         :src="wcUrl"
-        w-full h-full
+        w-full h-full bg-transparent
         :class="{
           'pointer-events-none': isDragging,
         }"
