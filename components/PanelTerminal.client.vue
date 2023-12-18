@@ -9,11 +9,11 @@ const props = defineProps<{
 
 const root = ref<HTMLDivElement>()
 
-const term = new Terminal({
+const terminal = new Terminal({
   customGlyphs: true,
 })
 const fitAddon = new FitAddon()
-term.loadAddon(fitAddon)
+terminal.loadAddon(fitAddon)
 
 useResizeObserver(root, useDebounceFn(() => fitAddon.fit(), 200))
 
@@ -25,7 +25,7 @@ watch(
     const reader = s.getReader()
     function read() {
       reader.read().then(({ done, value }) => {
-        term.write(value)
+        terminal.write(value)
         if (!done)
           read()
       })
@@ -38,11 +38,17 @@ watch(
   },
 )
 
-onMounted(() => {
-  term.open(root.value!)
-  term.write('\n')
-  fitAddon.fit()
-})
+const stop = watch(
+  () => root.value,
+  (el) => {
+    if (!el)
+      return
+    terminal.open(el)
+    terminal.write('\n')
+    fitAddon.fit()
+    stop()
+  },
+)
 </script>
 
 <template>
