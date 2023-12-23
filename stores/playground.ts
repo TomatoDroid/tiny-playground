@@ -2,7 +2,15 @@ import type { WebContainer } from '@webcontainer/api'
 import type { ShallowRef, UnwrapNestedRefs } from 'vue'
 import type { VirtualFile } from '~/structures/File'
 
-export type PlaygroundStatus = 'init' | 'mount' | 'install' | 'start' | 'ready' | 'error'
+export const PlaygroundStatusOrder = [
+  'init',
+  'mount',
+  'install',
+  'start',
+  'ready',
+] as const
+
+export type PlaygroundStatus = typeof PlaygroundStatusOrder[number] | 'error'
 
 export interface PlaygroundStateRaw {
   files: ShallowRef<VirtualFile[]>
@@ -28,7 +36,7 @@ export const usePlaygroundStore = defineStore('playground', (): PlaygroundStateR
   const previewUrl = computed(() => previewLocation.value.origin + previewLocation.value.fullPath)
 
   return {
-    files: shallowRef<VirtualFile[]>([]),
+    files: shallowRef([]),
     status: 'init',
     error: undefined,
     stream: undefined,

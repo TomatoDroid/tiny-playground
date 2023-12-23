@@ -17,12 +17,4 @@ onMounted(() => mountPlayground(play))
     }"
     allow="geolocation; microphone; camera; payment; autoplay; serial; cross-origin-isolated"
   />
-  <div
-    v-if="play.status !== 'ready'"
-    flex="~ col justify-center items-center"
-    capitalize text-lg h-full
-  >
-    <div i-svg-spinners-90-ring-with-bg />
-    {{ play.status }}ing
-  </div>
 </template>
