@@ -15,6 +15,6 @@ function toggleDark() {
     hover="bg-active"
     @click="toggleDark"
   >
-    <div class="i-ph-sun-dim-duotone dark:i-ph-moon-stars-duotone text-2xl" />
+    <div i-ph-sun-dim-duotone dark:i-ph-moon-stars-duotone text-2xl />
   </button>
 </template>

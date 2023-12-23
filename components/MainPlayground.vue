@@ -23,7 +23,7 @@ function endDraggingHorizontal(e: { size: number }[]) {
 
 <template>
   <Splitpanes
-    class="h-full of-hidden"
+    h-full of-hidden
     @resize="startDragging"
     @resized="endDraggingVertical"
   >
@@ -32,8 +32,7 @@ function endDraggingHorizontal(e: { size: number }[]) {
     </Pane>
     <Pane :size="100 - ui.panelDocs">
       <Splitpanes
-        class="of-hidden relative"
-        horizontal
+        of-hidden relative horizontal max-h-full w-full
         @resize="startDragging"
         @resized="endDraggingHorizontal"
       >
