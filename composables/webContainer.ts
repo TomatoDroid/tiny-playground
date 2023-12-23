@@ -14,7 +14,6 @@ export async function useWebContainer() {
 }
 
 export async function mountPlayground(play: PlaygroundState) {
-  debugger
   const { files, tree } = loadTemplate()
 
   window.addEventListener('message', (event) => {
