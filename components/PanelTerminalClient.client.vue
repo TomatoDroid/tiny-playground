@@ -5,9 +5,7 @@ import { FitAddon } from 'xterm-addon-fit'
 import themeLight from 'theme-vitesse/extra/xterm-vitesse-light.json'
 import themeDark from 'theme-vitesse/extra/xterm-vitesse-dark.json'
 
-const props = defineProps<{
-  stream?: ReadableStream
-}>()
+const play = usePlaygroundStore()
 
 const colorMode = useColorMode()
 
@@ -41,7 +39,7 @@ watch(() => theme.value, (t) => {
 useResizeObserver(root, useDebounceFn(() => fitAddon.fit(), 200))
 
 watch(
-  () => props.stream,
+  () => play.stream,
   (s) => {
     if (!s)
       return
@@ -81,11 +79,8 @@ const stop = watch(
 </script>
 
 <template>
-  <div h-full grid="~ rows-[min-content_1fr]">
-    <div flex="~ gap-2 items-center" px4 py2 border="b base dashed" bg-faded>
-      <div i-ph-terminal-window-duotone />
-      <span text-sm>Terminal</span>
-    </div>
-    <div ref="root" w-full h-full of-hidden />
-  </div>
+  <div
+    ref="root"
+    w-full h-full of-hidden
+  />
 </template>
