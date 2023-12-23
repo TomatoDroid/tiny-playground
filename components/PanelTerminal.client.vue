@@ -2,8 +2,8 @@
 import 'xterm/css/xterm.css'
 import { type ITheme, Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
-import themeLight from 'theme-vitesse/themes/vitesse-light.json'
-import themeBlack from 'theme-vitesse/themes/vitesse-black.json'
+import themeLight from 'theme-vitesse/extra/xterm-vitesse-light.json'
+import themeDark from 'theme-vitesse/extra/xterm-vitesse-dark.json'
 
 const props = defineProps<{
   stream?: ReadableStream
@@ -18,7 +18,7 @@ const theme = computed<ITheme>(() => {
         background: '#00000000',
       }
     : {
-        ...themeBlack,
+        ...themeDark,
         background: '#00000000',
       }
 })
