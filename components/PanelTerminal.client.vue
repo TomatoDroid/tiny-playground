@@ -1,19 +1,42 @@
 <script setup lang="ts">
 import 'xterm/css/xterm.css'
-import { Terminal } from 'xterm'
+import { type ITheme, Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
+import themeLight from 'theme-vitesse/themes/vitesse-light.json'
+import themeBlack from 'theme-vitesse/themes/vitesse-black.json'
 
 const props = defineProps<{
   stream?: ReadableStream
 }>()
 
+const colorMode = useColorMode()
+
+const theme = computed<ITheme>(() => {
+  return colorMode.value === 'light'
+    ? {
+        ...themeLight,
+        background: '#00000000',
+      }
+    : {
+        ...themeBlack,
+        background: '#00000000',
+      }
+})
+
 const root = ref<HTMLDivElement>()
 
 const terminal = new Terminal({
   customGlyphs: true,
+  allowTransparency: true,
+  theme: theme.value,
+  fontFamily: 'DM Mono, monospace',
 })
 const fitAddon = new FitAddon()
 terminal.loadAddon(fitAddon)
+
+watch(() => theme.value, (t) => {
+  terminal.options.theme = t
+})
 
 useResizeObserver(root, useDebounceFn(() => fitAddon.fit(), 200))
 
@@ -22,15 +45,20 @@ watch(
   (s) => {
     if (!s)
       return
-    const reader = s.getReader()
-    function read() {
-      reader.read().then(({ done, value }) => {
-        terminal.write(value)
-        if (!done)
-          read()
-      })
+    try {
+      const reader = s.getReader()
+      function read() {
+        reader.read().then(({ done, value }) => {
+          terminal.write(value)
+          if (!done)
+            read()
+        })
+      }
+      read()
     }
-    read()
+    catch (e) {
+      console.log(e)
+    }
   },
   {
     immediate: true,
