@@ -1,20 +1,37 @@
 <script setup lang="ts">
-import type { File } from '~/structures/File'
+import type { VirtualFile } from '~/structures/File'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
-    files: File[]
+    files: VirtualFile[]
   }>(),
   {
     files: () => [],
   },
 )
 
-const selectedFile = ref<File>()
+const INGORE_FILES = [
+  'pnpm-lock.yaml',
+  'pnpm-workspace.yaml',
+  '.npmrc',
+  'tsconfig.json',
+  'server/tsconfig.json',
+]
+
+const files = computed(() => {
+  return props.files.filter(file => !INGORE_FILES.includes(file.filePath))
+})
+
+const selectedFile = ref<VirtualFile>()
 
 const input = ref<string>()
 
-function selectFile(file: File) {
+watchEffect(() => {
+  if (selectedFile.value == null && files.value.length > 0)
+    selectFile(files.value[0])
+})
+
+function selectFile(file: VirtualFile) {
   selectedFile.value = file
   input.value = file.read()
 }
