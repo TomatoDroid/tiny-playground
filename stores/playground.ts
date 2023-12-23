@@ -9,10 +9,10 @@ export interface PlaygroundStateRaw {
   status: PlaygroundStatus
   error: { message: string } | undefined
   stream: ReadableStream | undefined
-  previewLocation: {
+  previewLocation: Ref<{
     origin: string
     fullPath: string
-  }
+  }>
   previewUrl: ComputedRef<string>
   webcontainer: ShallowRef<WebContainer | undefined>
 }
@@ -20,12 +20,12 @@ export interface PlaygroundStateRaw {
 export type PlaygroundState = UnwrapNestedRefs<PlaygroundStateRaw>
 
 export const usePlaygroundStore = defineStore('playground', (): PlaygroundStateRaw => {
-  const previewLocation = reactive({
+  const previewLocation = ref({
     origin: '',
     fullPath: '',
   })
 
-  const previewUrl = computed(() => previewLocation.origin + previewLocation.fullPath)
+  const previewUrl = computed(() => previewLocation.value.origin + previewLocation.value.fullPath)
 
   return {
     files: shallowRef<VirtualFile[]>([]),
