@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// @ts-expect-error missing type
 import { Pane, Splitpanes } from 'splitpanes'
 
 const ui = useUiState()
