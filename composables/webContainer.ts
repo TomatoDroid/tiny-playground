@@ -35,6 +35,9 @@ export async function mountPlayground(
       case 'update:path':
         play.previewLocation.fullPath = event.data.path
         break
+      case 'ready':
+        play.status = 'ready'
+        break
       default:
         break
     }
@@ -49,11 +52,10 @@ export async function mountPlayground(
     file.wc = wc
   })
 
-  wc.on('server-ready', (port, url) => {
+  wc.on('server-ready', async (port, url) => {
     // Nuxt listen to multiple ports, and 'server-ready' is emitted for each of them
     // We need the main one
     if (port === 3000) {
-      play.status = 'ready'
       play.previewLocation = {
         origin: url,
         fullPath: '/',

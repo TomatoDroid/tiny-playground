@@ -46,7 +46,9 @@ function navigate() {
         </div>
       </div>
     </div>
-    <PanelPreviewLoading />
-    <PanelPreviewClient ref="inner" />
+    <div relative h-full w-full>
+      <PanelPreviewLoading />
+      <PanelPreviewClient ref="inner" />
+    </div>
   </div>
 </template>

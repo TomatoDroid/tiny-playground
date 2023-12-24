@@ -24,7 +24,7 @@ watch(
   { flush: 'sync' },
 )
 
-onMounted(() => mountPlayground(play))
+onMounted(() => mountPlayground(play, colorMode.value))
 </script>
 
 <template>
@@ -32,10 +32,11 @@ onMounted(() => mountPlayground(play))
     v-if="play.previewUrl"
     ref="iframeEl"
     :src="play.previewUrl"
-    w-full h-full bg-transparent
     :class="{
       'pointer-events-none': ui.isPanelDragging,
     }"
+    :style="play.status === 'ready' ? '' : 'opacity: 0.001; pointer-events: none;'"
+    w-full h-full bg-transparent
     allow="geolocation; microphone; camera; payment; autoplay; serial; cross-origin-isolated"
     @load="onIframeload"
   />
