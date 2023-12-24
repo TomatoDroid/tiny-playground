@@ -8,6 +8,8 @@ import {
   transformerDirectives,
 } from 'unocss'
 
+import extractorMdc from '@unocss/extractor-mdc'
+
 export default defineConfig({
   shortcuts: {
     'border-base': 'border-gray-200 dark:border-gray-800',
@@ -38,4 +40,12 @@ export default defineConfig({
   transformers: [
     transformerDirectives(),
   ],
+  extractors: [
+    extractorMdc(),
+  ],
+  content: {
+    filesystem: [
+      './content/**/*.md',
+    ],
+  },
 })
