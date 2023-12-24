@@ -19,6 +19,20 @@ function endDraggingHorizontal(e: { size: number }[]) {
   ui.panelPreview = e[1].size
 }
 
+const terminalPanelProps = computed(() => {
+  if (ui.showTerminal) {
+    return {
+      size: 100 - ui.panelEditor - ui.panelPreview,
+    }
+  }
+  else {
+    return {
+      size: 0,
+      maxSize: 0,
+    }
+  }
+})
+
 const isMounted = useMounted()
 const panelInitDocs = computed(() => isMounted.value || {
   width: `${ui.panelDocs}%`,
@@ -74,8 +88,9 @@ const panelInitTerminal = computed(() => isMounted.value || {
         </Pane>
         <PaneSplitter />
         <Pane
-          :size="100 - ui.panelEditor - ui.panelPreview"
+          v-bind="terminalPanelProps"
           :style="panelInitTerminal"
+          :class="ui.showTerminal ? '' : 'pane-hidden'"
         >
           <PanelTerminal />
         </Pane>

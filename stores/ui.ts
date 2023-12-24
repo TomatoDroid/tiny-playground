@@ -4,7 +4,8 @@ export const useUiState = defineStore('ui', () => {
   const presistSize = reactive({
     panelDocs: 30,
     panelEditor: 30,
-    panelPreview: 30,
+    panelPreview: 40,
+    showTerminal: false,
   })
 
   const stateCookie = useCookie<Partial<typeof presistSize>>(
@@ -20,8 +21,23 @@ export const useUiState = defineStore('ui', () => {
     stateCookie.value = { ...presistSize }
   })
 
+  function toggleTeminal() {
+    const TERMINAL_HEIGHT = 30
+    presistSize.showTerminal = !presistSize.showTerminal
+    if (presistSize.showTerminal) {
+      presistSize.panelEditor = presistSize.panelEditor / 100 * (100 - TERMINAL_HEIGHT)
+      presistSize.panelPreview = presistSize.panelPreview / 100 * (100 - TERMINAL_HEIGHT)
+    }
+    else {
+      const remaining = presistSize.panelEditor + presistSize.panelPreview
+      presistSize.panelEditor = presistSize.panelEditor / remaining * 100
+      presistSize.panelPreview = presistSize.panelPreview / remaining * 100
+    }
+  }
+
   return {
     isPanelDragging,
+    toggleTeminal,
     ...toRefs(presistSize),
   }
 })
