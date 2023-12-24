@@ -28,21 +28,6 @@ export async function mountPlayground(
     }
   }
 
-  window.addEventListener('message', (event) => {
-    if (event.origin !== play.previewLocation.origin)
-      return
-    switch (event.data.type) {
-      case 'update:path':
-        play.previewLocation.fullPath = event.data.path
-        break
-      case 'ready':
-        play.status = 'ready'
-        break
-      default:
-        break
-    }
-  })
-
   const wc = await useWebContainer()
 
   play.webcontainer = wc
