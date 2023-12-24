@@ -22,15 +22,19 @@ function navigate() {
 </script>
 
 <template>
-  <div h-full grid="~ rows-[min-content_1fr]">
-    <div grid="~ cols-[90px_1fr_80px]" px4 border="b base dashed" bg-faded>
+  <div h-full :class="play.status === 'ready' ? 'grid grid-rows-[min-content_1fr]' : 'flex'">
+    <div
+      v-if="play.status === 'ready'"
+      flex="~ items-center gap-2"
+      px4 border="b base dashed" bg-faded
+    >
       <div flex="~ gap-2 items-center" py2>
         <div i-ph-globe-duotone />
         <span text-sm>Preview</span>
       </div>
-      <div flex px-2 py1.5>
+      <div flex px-2 py1>
         <div
-          flex="~ items-center justify-center" mx-auto w-full px2 max-w-100 bg-faded rounded text-sm border="base 1 hover:gray-500/30"
+          flex="~ items-center justify-center" mx-auto w-full px2 min-w-100 bg-faded rounded text-sm border="base 1 hover:gray-500/30"
           :class="{
             'pointer-events-none': !play.previewUrl,
           }"
