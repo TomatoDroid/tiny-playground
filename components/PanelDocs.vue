@@ -7,7 +7,7 @@
       <div i-ph-book-duotone />
       <span text-sm>Guide</span>
     </div>
-    <article p6 prose of-auto>
+    <article p6 prose of-auto max-w-none>
       <ContentDoc />
     </article>
   </div>
