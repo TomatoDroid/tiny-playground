@@ -10,16 +10,21 @@ const props = withDefaults(
   },
 )
 
-const INGORE_FILES = [
+const IGNORE_FILES: (string | RegExp)[] = [
   'pnpm-lock.yaml',
   'pnpm-workspace.yaml',
-  '.npmrc',
-  'tsconfig.json',
-  'server/tsconfig.json',
+  /tsconfig\.json$/,
+  /^\./,
 ]
 
+function isIgnored(filePath: string) {
+  return IGNORE_FILES.some(pattern => typeof pattern === 'string'
+    ? pattern === filePath
+    : pattern.test(filePath))
+}
+
 const files = computed(() => {
-  return props.files.filter(file => !INGORE_FILES.includes(file.filePath))
+  return props.files.filter(file => !isIgnored(file.filePath))
 })
 
 const selectedFile = ref<VirtualFile>()
