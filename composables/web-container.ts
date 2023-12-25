@@ -57,6 +57,7 @@ export async function mountPlayground(
   let processDev: WebContainerProcess | undefined
 
   play.actions.restartServer = startServer
+  play.actions.downloadZip = downloadZip
 
   function killPreviousProcess() {
     processInstall?.kill()
@@ -83,6 +84,44 @@ export async function mountPlayground(
     play.status = 'start'
     processDev = await wc.spawn('pnpm', ['run', 'dev'])
     play.stream = processDev.output
+  }
+
+  async function downloadZip() {
+    const { default: JSZip } = await import('jszip')
+    const zip = new JSZip()
+
+    type Zip = typeof zip
+
+    async function crawFiles(dir: string, zip: Zip) {
+      const files = await wc.fs.readdir(dir, { withFileTypes: true })
+
+      await Promise.all(
+        files.map(async (file) => {
+          if (isFileIgnored(file.name))
+            return
+          if (file.isFile()) {
+            const content = await wc.fs.readFile(`${dir}/${file.name}`, 'utf8')
+            zip.file(file.name, content)
+          }
+          else if (file.isDirectory()) {
+            const folder = zip.folder(file.name)!
+            return crawFiles(`${dir}/${file.name}`, folder)
+          }
+        }),
+      )
+    }
+    await crawFiles('.', zip)
+
+    const blob = await zip.generateAsync({ type: 'blob' })
+    const url = URL.createObjectURL(blob)
+    const date = new Date()
+    const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `nuxt-playground-${dateString}.zip`
+    link.click()
+    link.remove()
+    URL.revokeObjectURL(url)
   }
 
   startServer()

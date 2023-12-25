@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const ui = useUiState()
+const play = usePlaygroundStore()
 </script>
 
 <template>
@@ -9,10 +10,20 @@ const ui = useUiState()
     </NuxtLink>
     <div flex-auto />
     <button
+      v-if="play.status === 'ready'"
+      rounded p2
+      title="download as Zip"
+      hover="bg-active"
+      @click="play.actions.downloadZip()"
+    >
+      <div i-ph-download-duotone text-2xl />
+    </button>
+    <button
       rounded p2
       hover="bg-active"
+      title="toggle terminal"
       :class="ui.showTerminal ? '' : 'op50'"
-      @click="ui.toggleTeminal"
+      @click="ui.toggleTeminal()"
     >
       <div i-ph-terminal-window-duotone text-2xl />
     </button>
@@ -21,6 +32,7 @@ const ui = useUiState()
       p2
       rounded
       hover="bg-active"
+      title="github"
       href="https://github.com/TomatoDroid/tiny-playground"
       target="_blank"
     >

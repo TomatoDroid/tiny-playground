@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isFileIgnored } from '~/composables/files-ignore'
 import type { VirtualFile } from '~/structures/File'
 
 const props = withDefaults(
@@ -10,21 +11,8 @@ const props = withDefaults(
   },
 )
 
-const IGNORE_FILES: (string | RegExp)[] = [
-  'pnpm-lock.yaml',
-  'pnpm-workspace.yaml',
-  /tsconfig\.json$/,
-  /^\./,
-]
-
-function isIgnored(filePath: string) {
-  return IGNORE_FILES.some(pattern => typeof pattern === 'string'
-    ? pattern === filePath
-    : pattern.test(filePath))
-}
-
 const files = computed(() => {
-  return props.files.filter(file => !isIgnored(file.filePath))
+  return props.files.filter(file => !isFileIgnored(file.filePath))
 })
 
 const selectedFile = ref<VirtualFile>()
@@ -77,3 +65,4 @@ function onTextInput() {
     </div>
   </div>
 </template>
+../composables/isIgnored
