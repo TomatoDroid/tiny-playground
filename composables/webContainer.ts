@@ -1,4 +1,4 @@
-import { WebContainer } from '@webcontainer/api'
+import { WebContainer, type WebContainerProcess } from '@webcontainer/api'
 import { templates } from '~/templates'
 
 if (import.meta.server)
@@ -54,33 +54,46 @@ export async function mountPlayground(
   })
 
   play.status = 'mount'
-
   await wc.mount(tree)
 
-  play.status = 'install'
+  let processInstall: WebContainerProcess | undefined
+  let processDev: WebContainerProcess | undefined
 
-  const installProcess = await wc.spawn('pnpm', ['install'])
+  play.actions.restartServer = startServer
 
-  play.stream = installProcess.output
-
-  const installExitCode = await installProcess.exit
-
-  if (installExitCode !== 0) {
-    play.status = 'error'
-    play.error = {
-      message: `Unable to run npm install, exit as ${installExitCode}`,
-    }
-    throw new Error('Unable to run npm install')
+  function killPreviousProcess() {
+    processInstall?.kill()
+    processDev?.kill()
   }
 
-  play.status = 'start'
-  const process = await wc.spawn('pnpm', ['run', 'dev'])
-  play.stream = process.output
+  async function startServer() {
+    killPreviousProcess()
+
+    play.status = 'install'
+    processInstall = await wc.spawn('pnpm', ['install'])
+    play.stream = processInstall.output
+
+    const installExitCode = await processInstall.exit
+
+    if (installExitCode !== 0) {
+      play.status = 'error'
+      play.error = {
+        message: `Unable to run npm install, exit as ${installExitCode}`,
+      }
+      throw new Error('Unable to run npm install')
+    }
+
+    play.status = 'start'
+    processDev = await wc.spawn('pnpm', ['run', 'dev'])
+    play.stream = processDev.output
+  }
+
+  startServer()
 
   // In dev, when doing HMR, we kill the previous process while reusing the same WebContainer
   if (import.meta.hot) {
     import.meta.hot.accept(() => {
-      process.kill()
+      killPreviousProcess()
     })
   }
 }
