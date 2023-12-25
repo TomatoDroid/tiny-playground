@@ -60,9 +60,9 @@ function onTextInput() {
         border="l base"
         bg-transparent
         w-full h-full p4 font-mono
+        resize-none
         @input="onTextInput"
       />
     </div>
   </div>
 </template>
-../composables/isIgnored
