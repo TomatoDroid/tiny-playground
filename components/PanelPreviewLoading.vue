@@ -46,7 +46,7 @@ function getTextClass(status: PlaygroundStatus) {
   <div
     v-if="play.status !== 'ready'"
     flex="~ col justify-center items-center"
-    capitalize h-full
+    h-full capitalize
   >
     <div grid="~ cols-[max-content_1fr] gap-2 items-center justify-center">
       <div :class="getStatusIcon('init')" />

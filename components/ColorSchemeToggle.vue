@@ -10,8 +10,8 @@ function toggleDark() {
 
 <template>
   <button
-    p2
-    rounded
+
+    rounded p2
     hover="bg-active"
     @click="toggleDark"
   >

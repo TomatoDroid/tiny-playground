@@ -1,5 +1,5 @@
 <template>
-  <main w-screen h-screen h-100dvh>
+  <main h-100dvh h-screen w-screen>
     <TheNav />
     <slot />
   </main>

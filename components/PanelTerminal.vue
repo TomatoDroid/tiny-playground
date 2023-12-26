@@ -8,8 +8,8 @@ const play = usePlaygroundStore()
     <div
       flex="~ gap-2 items-center"
       border="b base dashed"
-      bg-faded
-      pl4 py2
+
+      bg-faded py2 pl4
     >
       <div i-ph-terminal-window-duotone />
       <span text-sm>Terminal</span>

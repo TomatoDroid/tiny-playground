@@ -81,6 +81,6 @@ const stop = watch(
 <template>
   <div
     ref="root"
-    w-full h-full of-hidden
+    h-full w-full of-hidden
   />
 </template>

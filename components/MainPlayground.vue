@@ -69,7 +69,7 @@ const panelInitTerminal = computed(() => isMounted.value || {
       :style="panelInitRight"
     >
       <Splitpanes
-        of-hidden relative horizontal max-h-full w-full
+        horizontal relative max-h-full w-full of-hidden
         @resize="startDragging"
         @resized="endDraggingHorizontal"
       >

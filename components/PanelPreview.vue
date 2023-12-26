@@ -26,7 +26,7 @@ function navigate() {
     <div
       v-if="play.status === 'ready'"
       flex="~ items-center gap-2"
-      px4 border="b base dashed" bg-faded
+      border="b base dashed" bg-faded px4
     >
       <div flex="~ gap-2 items-center" py2>
         <div i-ph-globe-duotone />
@@ -34,13 +34,13 @@ function navigate() {
       </div>
       <div flex px-2 py1>
         <div
-          flex="~ items-center justify-center" mx-auto w-full px2 min-w-100 bg-faded rounded text-sm border="base 1 hover:gray-500/30"
+          flex="~ items-center justify-center" mx-auto min-w-100 w-full rounded bg-faded px2 text-sm border="base 1 hover:gray-500/30"
           :class="{
             'pointer-events-none': !play.previewUrl,
           }"
         >
           <form w-full @submit.prevent="navigate">
-            <input v-model="inputUrl" w-full type="text" bg-transparent flex-1 focus:outline-none>
+            <input v-model="inputUrl" type="text" w-full flex-1 bg-transparent focus:outline-none>
           </form>
           <div flex="~ items-center justify-end">
             <button v-if="play.previewUrl" mx1 op-75 hover:op-100 @click="refreshIframe">

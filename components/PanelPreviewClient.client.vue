@@ -57,7 +57,7 @@ onMounted(async () =>
       'pointer-events-none': ui.isPanelDragging,
     }"
     :style="play.status === 'ready' ? '' : 'opacity: 0.001; pointer-events: none;'"
-    w-full h-full bg-transparent
+    h-full w-full bg-transparent
     allow="geolocation; microphone; camera; payment; autoplay; serial; cross-origin-isolated"
   />
 </template>

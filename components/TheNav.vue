@@ -29,8 +29,8 @@ const play = usePlaygroundStore()
     </button>
     <ColorSchemeToggle />
     <NuxtLink
-      p2
-      rounded
+
+      rounded p2
       hover="bg-active"
       title="github"
       href="https://github.com/TomatoDroid/tiny-playground"
