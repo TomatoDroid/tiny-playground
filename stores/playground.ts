@@ -1,7 +1,6 @@
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api'
 import type { Raw } from 'vue'
 import type { VirtualFile } from '~/structures/File'
-import { templates } from '~/templates'
 
 export const PlaygroundStatusOrder = [
   'init',
@@ -34,8 +33,10 @@ export const usePlaygroundStore = defineStore('playground', () => {
   let processInstall: WebContainerProcess | undefined
   let processDev: WebContainerProcess | undefined
 
+  // Mount the playground on client side
   if (import.meta.client) {
-    ;(async () => {
+    async function mounte() {
+      const { templates } = await import('../templates')
       const { files: _files, tree } = await templates.basic({
         nuxtrc: [
           colorMode.value === 'dark'
@@ -79,7 +80,9 @@ export const usePlaygroundStore = defineStore('playground', () => {
           killPreviousProcess()
         })
       }
-    })()
+    }
+
+    /* #__PURE__ */ mounte()
   }
 
   async function startServer() {
