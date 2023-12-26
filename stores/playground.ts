@@ -35,7 +35,7 @@ export const usePlaygroundStore = defineStore('playground', () => {
 
   // Mount the playground on client side
   if (import.meta.client) {
-    async function mounte() {
+    async function mount() {
       const { templates } = await import('../templates')
       const { files: _files, tree } = await templates.basic({
         nuxtrc: [
@@ -82,7 +82,7 @@ export const usePlaygroundStore = defineStore('playground', () => {
       }
     }
 
-    /* #__PURE__ */ mounte()
+    mount()
   }
 
   async function startServer() {
