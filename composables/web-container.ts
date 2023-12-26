@@ -14,7 +14,7 @@ export async function useWebContainer() {
 }
 
 export async function mountPlayground(
-  play: PlaygroundState,
+  play: PlaygroundStore,
   colorMode: string,
 ) {
   const { files, tree } = await templates.basic({

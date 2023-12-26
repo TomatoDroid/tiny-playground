@@ -1,5 +1,5 @@
 import type { WebContainer } from '@webcontainer/api'
-import type { ShallowRef, UnwrapNestedRefs } from 'vue'
+import type { Raw } from 'vue'
 import type { VirtualFile } from '~/structures/File'
 
 export const PlaygroundStatusOrder = [
@@ -12,28 +12,20 @@ export const PlaygroundStatusOrder = [
 
 export type PlaygroundStatus = typeof PlaygroundStatusOrder[number] | 'error'
 
-export interface PlaygroundStateRaw {
-  files: ShallowRef<VirtualFile[]>
-  status: PlaygroundStatus
-  error: { message: string } | undefined
-  stream: ReadableStream | undefined
-  previewLocation: Ref<{
-    origin: string
-    fullPath: string
-  }>
-  previewUrl: ComputedRef<string>
-  webcontainer: ShallowRef<WebContainer | undefined>
-  actions: PlaygroundActions
-}
-
 export interface PlaygroundActions {
   restartServer(): Promise<void>
   downloadZip(): Promise<void>
 }
 
-export type PlaygroundState = UnwrapNestedRefs<PlaygroundStateRaw>
+export type PlaygroundStore = ReturnType<typeof usePlaygroundStore>
 
-export const usePlaygroundStore = defineStore('playground', (): PlaygroundStateRaw => {
+export const usePlaygroundStore = defineStore('playground', () => {
+  const status = ref<PlaygroundStatus>('init')
+  const error = shallowRef<{ message: string }>()
+  const stream = ref<ReadableStream>()
+  const files = shallowRef<Raw<VirtualFile>[]>([])
+  const webcontainer = shallowRef<Raw<WebContainer>>()
+
   const previewLocation = ref({
     origin: '',
     fullPath: '',
@@ -48,13 +40,13 @@ export const usePlaygroundStore = defineStore('playground', (): PlaygroundStateR
   }
 
   return {
-    files: shallowRef([]),
-    status: 'init',
-    error: undefined,
-    stream: undefined,
+    files,
+    status,
+    error,
+    stream,
     previewLocation,
     previewUrl,
-    webcontainer: shallowRef(undefined),
+    webcontainer,
     actions,
   }
 })
