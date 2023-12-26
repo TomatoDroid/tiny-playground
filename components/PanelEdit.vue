@@ -28,6 +28,11 @@ function selectFile(file: VirtualFile) {
   selectedFile.value = file
   input.value = file.read()
 }
+
+function onTextInput() {
+  if (input.value != null)
+    selectedFile.value?.write(input.value)
+}
 </script>
 
 <template>
@@ -55,6 +60,7 @@ function selectFile(file: VirtualFile) {
         v-model="input"
         :filepath="selectedFile.filePath"
         h-full w-full
+        @change="onTextInput"
       />
       <!-- <textarea
         v-model="input"
