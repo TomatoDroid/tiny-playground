@@ -17,7 +17,7 @@ const files = computed(() => {
 
 const selectedFile = ref<VirtualFile>()
 
-const input = ref<string>()
+const input = ref<string>('')
 
 watchEffect(() => {
   if (selectedFile.value == null && files.value.length > 0)
@@ -27,11 +27,6 @@ watchEffect(() => {
 function selectFile(file: VirtualFile) {
   selectedFile.value = file
   input.value = file.read()
-}
-
-function onTextInput() {
-  if (input.value != null)
-    selectedFile.value?.write(input.value)
 }
 </script>
 
@@ -55,13 +50,19 @@ function onTextInput() {
           {{ file.filePath }}
         </button>
       </div>
-      <textarea
+      <PanelEditorClient
+        v-if="selectedFile"
+        v-model="input"
+        :filepath="selectedFile.filePath"
+        h-full w-full
+      />
+      <!-- <textarea
         v-model="input"
         border="l base"
 
         h-full w-full resize-none bg-transparent p4 font-mono
         @input="onTextInput"
-      />
+      /> -->
     </div>
   </div>
 </template>
