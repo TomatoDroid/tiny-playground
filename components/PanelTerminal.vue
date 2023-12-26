@@ -19,7 +19,7 @@ const play = usePlaygroundStore()
         hover="bg-active"
         rounded p1
         title="restart terminal"
-        @click="play.actions.restartServer()"
+        @click="play.restartServer()"
       >
         <div i-ph-arrow-clockwise-duotone />
       </button>

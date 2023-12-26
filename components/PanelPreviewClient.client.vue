@@ -42,10 +42,6 @@ watch(
   syncColorMode,
   { flush: 'sync' },
 )
-
-onMounted(async () =>
-  await mountPlayground(play, colorMode.value),
-)
 </script>
 
 <template>
