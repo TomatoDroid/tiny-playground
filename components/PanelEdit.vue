@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { isFileIgnored } from '~/composables/files-ignore'
-import type { VirtualFile } from '~/structures/File'
+import type { VirtualFile } from '~/structures/VirtualFile'
+import { filesToVirtualFsTree } from '~/templates/utils'
 
 const props = withDefaults(
   defineProps<{
@@ -15,6 +16,8 @@ const files = computed(() => {
   return props.files.filter(file => !isFileIgnored(file.filePath))
 })
 
+const directory = computed(() => filesToVirtualFsTree(files.value))
+
 const selectedFile = ref<VirtualFile>()
 
 const input = ref<string>('')
@@ -26,8 +29,12 @@ watchEffect(() => {
 
 function selectFile(file: VirtualFile) {
   selectedFile.value = file
-  input.value = file.read()
+  // input.value = file.read()
 }
+
+watch(selectedFile, (file) => {
+  input.value = file?.read()!
+})
 
 function onTextInput() {
   if (input.value != null)
@@ -43,17 +50,11 @@ function onTextInput() {
     </div>
     <div grid="~ cols-[1fr_2fr]">
       <div flex="~ col" h-full of-auto>
-        <button
-          v-for="file in files"
-          :key="file.filePath"
-          px2 py1 hover="bg-active" text-left
-          :class="{
-            'text-primary': file.filePath === selectedFile?.filePath,
-          }"
-          @click="selectFile(file)"
-        >
-          {{ file.filePath }}
-        </button>
+        <PanelEditorFileSystemTree
+          v-model="selectedFile"
+          :directory="directory"
+          :depth="-1"
+        />
       </div>
       <PanelEditorClient
         v-if="selectedFile"
@@ -72,3 +73,4 @@ function onTextInput() {
     </div>
   </div>
 </template>
+~/structures/VirtualFile
