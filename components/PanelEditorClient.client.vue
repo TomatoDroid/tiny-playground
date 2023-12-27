@@ -11,6 +11,8 @@ const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void
 }>()
 
+const theme = useColorMode()
+
 const el = ref<HTMLDivElement>()
 
 const models = new Map<string, monaco.editor.ITextModel>()
@@ -61,7 +63,12 @@ watch(
       value,
       {
         model: getModal(props.filepath),
-        theme: 'vs-dark',
+        theme: theme.value,
+        fontSize: 14,
+        bracketPairColorization: {
+          enabled: false,
+        },
+        glyphMargin: false,
         automaticLayout: true,
         minimap: {
           enabled: false,
@@ -79,6 +86,8 @@ watch(
         editor.setModel(getModal(props.filepath))
       },
     )
+
+    watch(theme,() => monaco.editor.setTheme(theme.value))
   },
 )
 </script>
