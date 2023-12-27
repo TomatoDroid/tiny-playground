@@ -87,7 +87,7 @@ watch(
       },
     )
 
-    watch(theme,() => monaco.editor.setTheme(theme.value))
+    watch(theme, () => monaco.editor.setTheme(theme.value))
   },
 )
 </script>
