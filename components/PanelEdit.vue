@@ -72,7 +72,7 @@ const panelInitEditor = computed(() => isMounted.value || {
       @resized="endDragging"
     >
       <Pane
-        flex="~ col" h-full of-auto
+        flex="~ col" h-full of-auto py1
         :size="ui.panelFileTree"
         :style="panelInitFileTree"
       >
