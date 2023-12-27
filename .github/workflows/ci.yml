@@ -20,7 +20,7 @@ jobs:
           node-version: lts/*
 
       - name: Install
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install
 
       - name: Typecheck
         run: pnpm run typecheck
