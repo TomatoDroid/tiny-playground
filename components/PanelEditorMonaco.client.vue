@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import '../monaco/worker'
+import { loadGrammars } from 'monaco-volar'
+import { initMonaco } from '../monaco/worker'
+import { Store } from '~/monaco/env'
 
 const props = defineProps<{
   modelValue: string
@@ -10,6 +12,13 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void
 }>()
+
+const play = usePlaygroundStore()
+const store = new Store()
+watchEffect(() => {
+  store.state.files = play.files.map(i => i.filepath)
+})
+initMonaco(store)
 
 const theme = useColorMode()
 
@@ -29,6 +38,7 @@ const language = computed(() => {
     case 'json':
       return 'json'
     case 'vue':
+      return 'vue'
     case 'html':
       return 'html'
     default:
@@ -36,7 +46,7 @@ const language = computed(() => {
   }
 })
 
-function getModal(filepath: string) {
+function getModel(filepath: string) {
   let model: monaco.editor.ITextModel
   if (!models.has(filepath)) {
     model = monaco.editor.createModel(
@@ -55,31 +65,33 @@ function getModal(filepath: string) {
 
 watch(
   () => el.value,
-  (value) => {
+  async (value) => {
     if (!value)
       return
 
     const editor = monaco.editor.create(
       value,
       {
-        model: getModal(props.filepath),
-        theme: theme.value,
-        fontSize: 14,
-        bracketPairColorization: {
+        'model': getModel(props.filepath),
+        'theme': theme.value,
+        'fontSize': 14,
+        'bracketPairColorization': {
           enabled: false,
         },
-        glyphMargin: false,
-        automaticLayout: true,
-        folding: false,
-        lineDecorationsWidth: 10,
-        lineNumbersMinChars: 3,
-        minimap: {
+        'glyphMargin': false,
+        'automaticLayout': true,
+        'folding': false,
+        'lineDecorationsWidth': 10,
+        'lineNumbersMinChars': 3,
+        'fontFamily': 'DM Mono, monospace',
+        'minimap': {
           enabled: false,
         },
-        padding: {
+        'padding': {
           top: 8,
         },
-        overviewRulerLanes: 0,
+        'semanticHighlighting.enabled': true,
+        'overviewRulerLanes': 0,
       },
     )
 
@@ -90,11 +102,13 @@ watch(
     watch(
       () => props.filepath,
       () => {
-        editor.setModel(getModal(props.filepath))
+        editor.setModel(getModel(props.filepath))
       },
     )
 
     watch(theme, () => monaco.editor.setTheme(theme.value))
+
+    await loadGrammars(monaco, editor)
   },
 )
 </script>
