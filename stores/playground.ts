@@ -17,7 +17,7 @@ export type PlaygroundStore = ReturnType<typeof usePlaygroundStore>
 export const usePlaygroundStore = defineStore('playground', () => {
   const status = ref<PlaygroundStatus>('init')
   const error = shallowRef<{ message: string }>()
-  const stream = ref<ReadableStream>()
+  const currentProcess = shallowRef<Raw<WebContainerProcess | undefined>>()
   const files = shallowRef<Raw<VirtualFile>[]>([])
   const webcontainer = shallowRef<Raw<WebContainer>>()
 
@@ -32,9 +32,6 @@ export const usePlaygroundStore = defineStore('playground', () => {
   }
 
   const colorMode = useColorMode()
-
-  let processInstall: WebContainerProcess | undefined
-  let processDev: WebContainerProcess | undefined
 
   // Mount the playground on client side
   if (import.meta.client) {
@@ -65,13 +62,13 @@ export const usePlaygroundStore = defineStore('playground', () => {
             origin: url,
             fullPath: '/',
           }
-          updatePreviewUrl()
+          status.value = 'start'
         }
       })
 
       wc.on('error', (err) => {
-        status.value = 'error'
         error.value = err
+        status.value = 'error'
       })
 
       status.value = 'mount'
@@ -89,17 +86,45 @@ export const usePlaygroundStore = defineStore('playground', () => {
     mount()
   }
 
+  let abortController: AbortController | undefined
+
   async function startServer() {
     if (!import.meta.client)
       return
-    const wc = webcontainer.value!
+
     killPreviousProcess()
 
-    status.value = 'install'
-    processInstall = await wc.spawn('pnpm', ['install'])
-    stream.value = processInstall.output
+    const wc = webcontainer.value!
+    abortController = new AbortController()
+    const signal = abortController.signal
 
-    const installExitCode = await processInstall.exit
+    await launchDefaultProcess(wc, signal)
+    await launchInteractiveProcess(wc, signal)
+  }
+
+  async function spawn(wc: WebContainer, command: string, args: string[] = []) {
+    if (currentProcess.value)
+      throw new Error('A process is already running')
+    const process = await wc.spawn(command, args)
+    currentProcess.value = process
+    return process.exit.then((r) => {
+      if (currentProcess.value === process)
+        currentProcess.value = undefined
+      return r
+    })
+  }
+
+  async function launchDefaultProcess(wc: WebContainer, signal: AbortSignal) {
+    if (!wc)
+      return
+    status.value = 'install'
+
+    if (signal.aborted)
+      return
+
+    const installExitCode = await spawn(wc, 'pnpm', ['install'])
+    if (signal.aborted)
+      return
 
     if (installExitCode !== 0) {
       status.value = 'error'
@@ -109,9 +134,13 @@ export const usePlaygroundStore = defineStore('playground', () => {
       throw new Error('Unable to run npm install')
     }
 
-    status.value = 'start'
-    processDev = await wc.spawn('pnpm', ['run', 'dev', '--no-qr'])
-    stream.value = processDev.output
+    await spawn(wc, 'pnpm', ['run', 'dev', '--no-qr'])
+  }
+
+  async function launchInteractiveProcess(wc: WebContainer, signal: AbortSignal) {
+    if (signal.aborted)
+      return
+    await spawn(wc, 'jsh')
   }
 
   async function downloadZip() {
@@ -157,15 +186,17 @@ export const usePlaygroundStore = defineStore('playground', () => {
   }
 
   function killPreviousProcess() {
-    processInstall?.kill()
-    processDev?.kill()
+    abortController?.abort()
+    abortController = undefined
+    currentProcess.value?.kill()
+    currentProcess.value = undefined
   }
 
   return {
     files,
     status,
     error,
-    stream,
+    currentProcess,
     previewLocation,
     previewUrl,
     updatePreviewUrl,

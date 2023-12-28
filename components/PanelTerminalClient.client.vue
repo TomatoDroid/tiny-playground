@@ -39,15 +39,16 @@ watch(() => theme.value, (t) => {
 useResizeObserver(root, useDebounceFn(() => fitAddon.fit(), 200))
 
 watch(
-  () => play.stream,
-  (s) => {
-    if (!s)
+  () => play.currentProcess,
+  (p) => {
+    if (!p)
       return
     try {
-      const reader = s.getReader()
+      const reader = p.output.getReader()
       function read() {
         reader.read().then(({ done, value }) => {
-          terminal.write(value)
+          if (value)
+            terminal.write(value)
           if (!done)
             read()
         })
@@ -57,6 +58,15 @@ watch(
     catch (e) {
       // eslint-disable-next-line no-console
       console.log(e)
+    }
+    try {
+      const writer = p.input.getWriter()
+      terminal.onData((data) => {
+        writer.write(data)
+      })
+    }
+    catch (e) {
+      console.error(e)
     }
   },
   {
