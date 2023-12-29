@@ -34,6 +34,14 @@ export default defineNuxtConfig({
         'Cross-Origin-Opener-Policy': 'same-origin',
       },
     },
+    optimizeDeps: {
+      include: [
+        'monaco-editor/esm/vs/editor/editor.worker',
+        '@volar/cdn',
+        '@vue/language-service',
+        '@volar/monaco/worker',
+      ],
+    },
   },
   vue: {
     defineModel: true,

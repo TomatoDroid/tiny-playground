@@ -77,7 +77,7 @@ const panelInitTerminal = computed(() => isMounted.value || {
           :size="ui.panelEditor" min-size="10"
           :style="panelInitEditor"
         >
-          <PanelEdit :files="play.files" />
+          <PanelEditor :files="play.files" />
         </Pane>
         <PaneSplitter />
         <Pane
