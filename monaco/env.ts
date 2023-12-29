@@ -34,7 +34,6 @@ export async function reloadLanguageTools(store: Store) {
     host: new WorkerHost(),
     createData: {
       tsconfig: {},
-      dependencies: {},
     } satisfies CreateData,
   })
   const languageId = ['vue', 'javascript', 'typescript']

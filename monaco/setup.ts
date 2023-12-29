@@ -6,8 +6,8 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 
-import themeDark from 'shikiji/themes/vitesse-dark.mjs'
-import themeLight from 'shikiji/themes/vitesse-light.mjs'
+import themeDark from 'theme-vitesse/themes/vitesse-black.json'
+import themeLight from 'theme-vitesse/themes/vitesse-light.json'
 
 import vueWorker from './vue.worker?worker'
 import { loadWasm, reloadLanguageTools } from './env'
