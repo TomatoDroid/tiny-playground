@@ -23,6 +23,11 @@ export default defineNuxtConfig({
       },
     },
   },
+  runtimeConfig: {
+    public: {
+      buildTime: Date.now(),
+    },
+  },
   vite: {
     build: {
       minify: 'esbuild',
