@@ -62,7 +62,7 @@
 }
 
 .v-popper__popper .v-popper__arrow-inner {
-  --uno: border-white dark:border-[#020420]
+  --uno: border-white dark-border-[#020420]
 }
 
 .v-popper {
