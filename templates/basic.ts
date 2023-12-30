@@ -3,27 +3,14 @@ import { filesToWebContainerFs } from './utils'
 
 import type { TemplateOptions } from './types'
 
+import template from '#build/templates/basic'
+
 export default function load(options: TemplateOptions = {}) {
   if (import.meta.server)
     throw new Error('This template can only be used on the client')
 
-  const rawInput = import.meta.glob([
-    './basic/**/*.*',
-    './basic/**/.npmrc',
-    './basic/**/.layer-playground/**/*.*',
-    './basic/**/.nuxtrc',
-  ], {
-    as: 'raw',
-    eager: true,
-  })
-
-  const rawFiles = {
-    ...Object.fromEntries(
-      Object.entries(rawInput)
-        .map(([key, value]) => {
-          return [key.replace('./basic/', ''), value]
-        }),
-    ),
+  const rawFiles: Record<string, string> = {
+    ...template,
     ...options.files,
   }
 

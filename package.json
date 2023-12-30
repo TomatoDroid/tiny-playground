@@ -14,12 +14,14 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
+    "@nuxt/kit": "^3.9.0",
     "@volar/cdn": "^1.11.1",
     "@volar/monaco": "^1.11.1",
     "@vue/language-service": "^1.8.27",
     "@webcontainer/api": "^1.1.8",
     "birpc": "^0.2.14",
     "execa": "^8.0.1",
+    "fast-glob": "^3.3.2",
     "floating-vue": "2.0.0-beta.24",
     "jszip": "^3.10.1",
     "monaco-editor": "^0.45.0",
