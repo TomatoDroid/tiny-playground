@@ -1,8 +1,10 @@
 import { createBirpc } from 'birpc'
-import type { FrameFunctions, ParentFunctions } from '../../../../types/rpc'
+import type { ClientInfo, FrameFunctions, ParentFunctions } from '../../../../types/rpc'
 
 export default defineNuxtPlugin(() => {
   const router = useRouter()
+
+  const runtimeConfig = useRuntimeConfig()
 
   const functions: FrameFunctions = {
     onColorModeChange(mode: string) {
@@ -18,7 +20,7 @@ export default defineNuxtPlugin(() => {
   router.afterEach((to) => {
     rpc.onNagivate(to.fullPath)
   })
-  rpc.onReady()
+  rpc.onReady(toRaw(runtimeConfig.public.clientInfo as ClientInfo))
 })
 
 function createRpc(functions: FrameFunctions) {

@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@8.12.0",
+  "packageManager": "pnpm@8.13.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -19,6 +19,8 @@
     "@vue/language-service": "^1.8.27",
     "@webcontainer/api": "^1.1.8",
     "birpc": "^0.2.14",
+    "execa": "^8.0.1",
+    "floating-vue": "2.0.0-beta.24",
     "jszip": "^3.10.1",
     "monaco-editor": "^0.45.0",
     "monaco-editor-textmate": "^4.0.0",

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { createBirpc } from 'birpc'
-import type { FrameFunctions, ParentFunctions } from '../types/rpc'
+import type { ClientInfo, FrameFunctions, ParentFunctions } from '../types/rpc'
 
 const play = usePlaygroundStore()
 const ui = useUiState()
@@ -11,8 +11,9 @@ const rpc = createBirpc<FrameFunctions, ParentFunctions>({
   onNagivate(path) {
     play.previewLocation.fullPath = path
   },
-  async onReady() {
+  async onReady(info: ClientInfo) {
     play.status = 'ready'
+    play.clientInfo = info
     syncColorMode()
   },
 }, {

@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { execaSync } from 'execa'
+
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
@@ -6,6 +8,7 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
+    'floating-vue/nuxt',
   ],
   colorMode: {
     classSuffix: '',
@@ -26,6 +29,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       buildTime: Date.now(),
+      gitsha: execaSync('git', ['rev-parse', 'HEAD']).stdout.trim(),
     },
   },
   vite: {
@@ -42,7 +46,8 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: [
         'monaco-editor/esm/vs/editor/editor.worker',
-        '@volar/cdn',
+        // 'monaco-editor-core/esm/vs/editor/editor.worker',
+        'typescript/lib/tsserverlibrary',
         '@vue/language-service',
         '@volar/monaco/worker',
         'typescript',
